@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.5)
+project(Key-Value-Parser C)
+file(GLOB SRC "src/*.c")
+add_library(KeyValueParserLibrary STATIC ${SRC})
+target_include_directories(KeyValueParserLibrary PUBLIC inc)
+add_executable(main main.c)
+target_link_libraries(main KeyValueParserLibrary)
