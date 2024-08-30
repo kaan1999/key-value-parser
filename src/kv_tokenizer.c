@@ -24,13 +24,13 @@ kv_token_ptr kv_token_init(kv_tokenType_t type, const char *value)
     token->prev = token->next = NULL;
     token->tokenType = type;
     //if value is null, type must be colon or semicolon
-    if (!value && type == COLON || type == SEMICOLON)
+    if (!value && (type == COLON || type == SEMICOLON))
     {
         token->tokenValue = NULL;
         return token;
     }
     //if value is not null, type must be key or value
-    else if (value && type == KEY || type == VALUE)
+    else if (value && (type == KEY || type == VALUE))
     {
         size_t szValue = strlen(value);
         if (szValue >= KV_MAX_SIZE)
@@ -51,6 +51,7 @@ kv_token_ptr kv_token_init(kv_tokenType_t type, const char *value)
     }
     //undefined type or invalid value
     errno = EINVAL;
+    free(token);
     return NULL;
 }
 errno_t kv_token_destroy(kv_token_ptr token){
@@ -77,5 +78,28 @@ kv_tokenList_ptr kv_tokenList_init(){
     list->head = list->tail = NULL;
     return list;
 }
-errno_t kv_tokenList_destroy(kv_tokenList_ptr);
-errno_t kv_tokenList_push(kv_tokenList_ptr, kv_tokenType_t, const char *);
+errno_t kv_tokenList_destroy(kv_tokenList_ptr list){
+    if(!list) return (errno = EINVAL);
+    kv_token_ptr iter = list->head;
+    while (iter)
+    {
+        kv_token_ptr temp = iter;
+        iter = iter->next;
+        kv_token_destroy(temp);
+    }
+    list->head = list->tail = NULL;
+    free(list);
+    return 0;
+}
+errno_t kv_tokenList_push(kv_tokenList_ptr list, kv_tokenType_t type, const char *value){
+    if(!list->head){
+        list->head = list->tail = kv_token_init(type, value);
+        if(!list->head) return errno;
+        return 0;
+    }
+    list->tail->next = kv_token_init(type, value);
+    if(!list->tail->next) return errno;
+    list->tail->next->prev = list->tail;
+    list->tail = list->tail->next;
+    return 0;
+}
