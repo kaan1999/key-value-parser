@@ -1,4 +1,7 @@
 #include <errno.h>
+
+#define KV_MAX_SIZE 256
+
 //typedefs
 typedef enum KVTokenType kv_tokenType_t;
 typedef struct KVToken kv_token_t, *kv_token_ptr;
@@ -9,7 +12,6 @@ enum KVTokenType{
 };
 
 //functions
-
 kv_token_ptr kv_token_init(kv_tokenType_t, const char *);
 errno_t kv_token_destroy(kv_token_ptr);
 
