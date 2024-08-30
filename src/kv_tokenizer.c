@@ -53,8 +53,21 @@ kv_token_ptr kv_token_init(kv_tokenType_t type, const char *value)
     errno = EINVAL;
     return NULL;
 }
-errno_t kv_token_destroy(kv_token_ptr);
-
+errno_t kv_token_destroy(kv_token_ptr token){
+    if(token){
+        if(token->tokenValue) free(token->tokenValue);
+        free(token);
+        return 0;
+    }
+    return (errno = EINVAL);
+}
+errno_t kv_token_destroySafe(kv_token_ptr *ptoken){
+    if(!ptoken || !*ptoken) return (errno = EINVAL);
+    if((*ptoken)->tokenValue) free((*ptoken)->tokenValue);
+    free(*ptoken);
+    *ptoken = NULL;
+    return 0;
+}
 kv_tokenList_ptr kv_tokenList_init();
 errno_t kv_tokenList_destroy(kv_tokenList_ptr);
 errno_t kv_tokenList_push(kv_tokenList_ptr, kv_tokenType_t, const char *);
