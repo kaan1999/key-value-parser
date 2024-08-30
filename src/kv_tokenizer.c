@@ -8,38 +8,50 @@ struct KVToken
     char *tokenValue;
     kv_token_ptr prev, next;
 };
-struct KVTokenList{
+struct KVTokenList
+{
     kv_token_ptr head, tail;
 };
 
-kv_token_ptr kv_token_init(kv_tokenType_t type, const char *value){
-    if(!value){
-        errno = EINVAL;
-        return NULL;
-    }
+kv_token_ptr kv_token_init(kv_tokenType_t type, const char *value)
+{
     kv_token_ptr token = malloc(sizeof(kv_token_t));
-    if(!token){
+    if (!token)
+    {
         errno = ENOMEM;
         return NULL;
     }
-    size_t szValue = strlen(value);
-    if(szValue >= KV_MAX_SIZE){
-        errno = ENAMETOOLONG;
-        free(token);
-        return NULL;
-    }
-    token->tokenValue = malloc(szValue + 1);
-    if(!token->tokenValue){
-        errno = ENOMEM;
-        free(token);
-        return NULL;
-    }
-    strcpy(token->tokenValue, value);
+    token->prev = token->next = NULL;
     token->tokenType = type;
-
-    token->next = token->prev = NULL;
-    
-    return token;
+    //if value is null, type must be colon or semicolon
+    if (!value && type == COLON || type == SEMICOLON)
+    {
+        token->tokenValue = NULL;
+        return token;
+    }
+    //if value is not null, type must be key or value
+    else if (value && type == KEY || type == VALUE)
+    {
+        size_t szValue = strlen(value);
+        if (szValue >= KV_MAX_SIZE)
+        {
+            errno = ENAMETOOLONG;
+            free(token);
+            return NULL;
+        }
+        token->tokenValue = malloc(szValue + 1);
+        if (!token->tokenValue)
+        {
+            errno = ENOMEM;
+            free(token);
+            return NULL;
+        }
+        strcpy(token->tokenValue, value);
+        return token;
+    }
+    //undefined type or invalid value
+    errno = EINVAL;
+    return NULL;
 }
 errno_t kv_token_destroy(kv_token_ptr);
 
