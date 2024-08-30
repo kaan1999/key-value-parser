@@ -68,6 +68,14 @@ errno_t kv_token_destroySafe(kv_token_ptr *ptoken){
     *ptoken = NULL;
     return 0;
 }
-kv_tokenList_ptr kv_tokenList_init();
+kv_tokenList_ptr kv_tokenList_init(){
+    kv_tokenList_ptr list = malloc(sizeof(kv_tokenList_t));
+    if(!list){
+        errno = EINVAL;
+        return NULL;
+    }
+    list->head = list->tail = NULL;
+    return list;
+}
 errno_t kv_tokenList_destroy(kv_tokenList_ptr);
 errno_t kv_tokenList_push(kv_tokenList_ptr, kv_tokenType_t, const char *);
