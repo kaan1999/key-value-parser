@@ -18,6 +18,6 @@ int main(void){
     if(kv_tokenList_destroy(tokenList)) perror("Error");
     //test end tokenList_push 
     */
-   kv_tokenList_ptr tokenList = kv_tokenizer_read("kvcp.txt");
+   kv_tokenList_ptr tokenList = kv_tokenizer_read("kvp.txt");
    if(!tokenList) perror("Error");
 }
