@@ -18,3 +18,5 @@ kv_tokenList_ptr kv_tokenList_init();
 errno_t kv_tokenList_destroy(kv_tokenList_ptr);
 errno_t kv_token_destroySafe(kv_token_ptr *ptoken);
 errno_t kv_tokenList_push(kv_tokenList_ptr, kv_tokenType_t, const char *);
+
+kv_tokenList_ptr kv_tokenizer_read(const char *fileName);
