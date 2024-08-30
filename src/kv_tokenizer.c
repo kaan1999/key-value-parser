@@ -2,7 +2,7 @@
 
 struct KVToken
 {
-    KVTokenType tokenType;
+    kv_tokenType_t tokenType;
     char *tokenValue;
     kv_token_ptr prev, next;
 };
