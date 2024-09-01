@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stddef.h": "c",
-        "kv_parser.h": "c"
+        "kv_parser.h": "c",
+        "stdlib.h": "c"
     }
 }
