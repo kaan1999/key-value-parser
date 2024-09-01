@@ -77,12 +77,14 @@ errno_t kv_list_push(kv_list_ptr list, void *data, kv_nodeDtor_fptr dtor){
     if(!list->head){
         list->head = list->tail = kv_node_init(data, dtor);
         if(!list->head) return errno;
+        list->length++;
         return 0;
     }
     list->tail->next = kv_node_init(data, dtor);
     if(!list->tail->next) return errno;
     list->tail->next->prev = list->tail;
     list->tail = list->tail->next;
+    list->length++;
     return 0;
 }
 
@@ -98,4 +100,10 @@ void *kv_list_data(kv_node_ptr node){
     if(node) return node->data;
     errno = EINVAL;
     return NULL;
+}
+
+size_t kv_list_size(kv_list_ptr list){
+    if(list) return list->length;
+    errno = EINVAL;
+    return (size_t)-1;
 }

@@ -13,6 +13,7 @@ errno_t kv_list_destroy(kv_list_ptr list);
 errno_t kv_list_push(kv_list_ptr list, void *data, kv_nodeDtor_fptr dtor);
 kv_node_ptr kv_list_each(kv_list_ptr list);
 void *kv_list_data(kv_node_ptr node);
+size_t kv_list_size(kv_list_ptr list);
 
 #define kv_list_forEach(list, i) \
 for(kv_node_ptr i = kv_list_each(list); i != NULL; i = kv_list_each(NULL)){

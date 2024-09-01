@@ -1,14 +1,5 @@
 #include <kv_tokenizer.h>
-#include <kv_list.h>
 #include <stdio.h>
-#include <stdlib.h>
-
-errno_t intptr_dtor(void *pv)
-{
-    free(pv);
-    return 0;
-}
-
 int main(void)
 {
     /*
@@ -29,6 +20,7 @@ int main(void)
     //test end tokenList_push
     */
 
+    /*
     kv_list_ptr list = kv_list_init();
     kv_list_push(list, (void *)10, NULL);
     kv_list_push(list, "kaan", NULL);
@@ -38,7 +30,14 @@ int main(void)
     kv_list_forEach(list, i)
         printf("%ju ", (uintptr_t)kv_list_data(i));
     kv_end
-    
-
     kv_list_destroy(list);
+    */
+
+    kv_list_ptr tokenList = kv_tokenizer_read("kvp.txt");
+    kv_list_forEach(tokenList, i)
+        kv_token_ptr t = kv_list_data(i);
+        printf("token value: %s\n", kv_token_value(t));
+    kv_end
+    printf("%ju", kv_list_size(tokenList));
+    kv_list_destroy(tokenList);
 }
