@@ -1,4 +1,4 @@
-#include <kv_tokenizer.h>
+#include <kv_parser.h>
 #include <stdio.h>
 int main(void)
 {
@@ -33,6 +33,7 @@ int main(void)
     kv_list_destroy(list);
     */
 
+    /*
     kv_list_ptr tokenList = kv_tokenizer_read("kvp.txt");
     kv_list_forEach(tokenList, i)
         kv_token_ptr t = kv_list_data(i);
@@ -40,4 +41,31 @@ int main(void)
     kv_end
     printf("%ju", kv_list_size(tokenList));
     kv_list_destroy(tokenList);
+    */
+
+
+    kv_pair_ptr pair1 = kv_pair_init(NULL, NULL);
+    perror("err");
+    errno = 0;
+    kv_pair_ptr pair2 = kv_pair_init(NULL, "kaan");
+    perror("err");
+    errno = 0;
+    kv_pair_ptr pair3 = kv_pair_init("name", NULL);
+    perror("err");
+    errno = 0;
+    kv_pair_ptr pair4 = kv_pair_init("name", "kaan");
+    perror("err");
+    errno = 0;
+    kv_pair_destroy(pair1);
+    perror("err");
+    errno = 0;
+    kv_pair_destroy(pair2);
+    perror("err");
+    errno = 0;
+    kv_pair_destroy(pair3);
+    perror("err");
+    errno = 0;
+    kv_pair_destroy(pair4);
+    perror("err");
+    errno = 0;
 }

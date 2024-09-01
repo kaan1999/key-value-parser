@@ -1,3 +1,6 @@
+#if !defined(KV_TOKENIZER_H)
+#define KV_TOKENIZER_H
+
 #include <kv_list.h>
 
 #define KV_MAX_SIZE 256
@@ -15,3 +18,5 @@ errno_t kv_token_destroy(void*);
 kv_tokenType_t kv_token_type(kv_token_ptr token);
 char *kv_token_value(kv_token_ptr token);
 kv_list_ptr kv_tokenizer_read(const char *fileName);
+
+#endif // KV_TOKENIZER_H

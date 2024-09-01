@@ -1,3 +1,6 @@
+#if !defined(KV_LIST_H)
+#define KV_LIST_H
+
 #include <errno.h>
 
 typedef errno_t (*kv_nodeDtor_fptr)(void*);
@@ -19,3 +22,5 @@ size_t kv_list_size(kv_list_ptr list);
 for(kv_node_ptr i = kv_list_each(list); i != NULL; i = kv_list_each(NULL)){
 
 #define kv_end }
+
+#endif // KV_LIST_H
