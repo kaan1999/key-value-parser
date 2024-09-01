@@ -1,6 +1,6 @@
 #include <errno.h>
-typedef struct KVNode kv_node_t, kv_node_ptr;
-typedef struct KVList kv_list_t, kv_list_ptr;
+typedef struct KVNode kv_node_t, *kv_node_ptr;
+typedef struct KVList kv_list_t, *kv_list_ptr;
 
 kv_node_ptr kv_node_init(void *data);
 errno_t kv_node_destroy(kv_node_ptr node, errno_t (*funDestroy)(void*));
