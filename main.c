@@ -1,82 +1,41 @@
 #include <kv_parser.h>
 #include <kv_tokenizer.h>
 #include <stdio.h>
-int main(void)
+#include <string.h>
+
+int main(int argc, char *const argv[])
 {
-    /*
-    //test start tokenList_push
-    kv_tokenList_ptr tokenList = kv_tokenList_init();
-    if(!tokenList) perror("Error");
-    if(kv_tokenList_push(tokenList, 300, NULL)) perror("Error");
-    if(kv_tokenList_push(tokenList, KEY, NULL)) perror("Error");
-    if(kv_tokenList_push(tokenList, VALUE, NULL)) perror("Error");
-    if(kv_tokenList_push(tokenList, COLON, NULL)) perror("Error");
-    if(kv_tokenList_push(tokenList, SEMICOLON, NULL)) perror("Error");
-    if(kv_tokenList_push(tokenList, 300, "a")) perror("Error");
-    if(kv_tokenList_push(tokenList, KEY, "a")) perror("Error");
-    if(kv_tokenList_push(tokenList, VALUE, "a")) perror("Error");
-    if(kv_tokenList_push(tokenList, COLON, "a")) perror("Error");
-    if(kv_tokenList_push(tokenList, SEMICOLON, "a")) perror("Error");
-    if(kv_tokenList_destroy(tokenList)) perror("Error");
-    //test end tokenList_push
-    */
-
-    /*
-    kv_list_ptr list = kv_list_init();
-    kv_list_push(list, (void *)10, NULL);
-    kv_list_push(list, "kaan", NULL);
-    kv_list_push(list, (void *)30, NULL);
-    kv_list_push(list, (void *)40, NULL);
-    
-    kv_list_forEach(list, i)
-        printf("%ju ", (uintptr_t)kv_list_data(i));
-    kv_end
-    kv_list_destroy(list);
-    */
-
-    /*
-    kv_list_ptr tokenList = kv_tokenizer_read("kvp.txt");
-    kv_list_forEach(tokenList, i)
-        kv_token_ptr t = kv_list_data(i);
-        printf("token value: %s\n", kv_token_value(t));
-    kv_end
-    printf("%ju", kv_list_size(tokenList));
-    kv_list_destroy(tokenList);
-    */
-
-   /*
-    kv_pair_ptr pair1 = kv_pair_init(NULL, NULL);
-    perror("err");
-    errno = 0;
-    kv_pair_ptr pair2 = kv_pair_init(NULL, "kaan");
-    perror("err");
-    errno = 0;
-    kv_pair_ptr pair3 = kv_pair_init("name", NULL);
-    perror("err");
-    errno = 0;
-    kv_pair_ptr pair4 = kv_pair_init("name", "kaan");
-    perror("err");
-    errno = 0;
-    kv_pair_destroy(pair1);
-    perror("err");
-    errno = 0;
-    kv_pair_destroy(pair2);
-    perror("err");
-    errno = 0;
-    kv_pair_destroy(pair3);
-    perror("err");
-    errno = 0;
-    kv_pair_destroy(pair4);
-    perror("err");
-    errno = 0;
-    */
-
-
-    kv_list_ptr tokenStream = kv_tokenizer_read("kvp.txt");
-    if(!tokenStream) perror("Error");
+    if(argc < 3) {
+        fprintf(stderr, "Error: %s\n", strerror(EINVAL));
+        return EINVAL;
+    }
+    const char *fileName = argv[1];
+    const char *outputFileName = argv[2];
+    kv_list_ptr tokenStream = kv_tokenizer_read(fileName);
+    if(!tokenStream){
+        perror("Error");
+        return 1;
+    }
     kv_list_ptr pairList = kv_parser(tokenStream);
-    if(!pairList) perror("Error");
-
     kv_list_destroy(tokenStream);
+    if(!pairList){
+        perror("Error");
+        return 1;
+    }
+
+    FILE *outputFile = fopen(outputFileName, "w");
+
+    char pairBuffer[1024] = {'\0'};
+    kv_list_forEach(pairList, pairNode)
+        kv_pair_ptr pair = kv_list_data(pairNode);
+        char *key = kv_pair_key(pair);
+        char *value = kv_pair_value(pair);
+        strcpy(pairBuffer, key);
+        strcat(pairBuffer, ":");
+        strcat(pairBuffer, value);
+        strcat(pairBuffer, ";");
+        fprintf(outputFile, "%s\n", pairBuffer);
+    kv_end
+    fclose(outputFile);
     kv_list_destroy(pairList);
 }

@@ -142,6 +142,7 @@ kv_list_ptr kv_tokenizer_read(const char *fileName)
             if (i >= KV_MAX_SIZE - 1)
             {
                 fclose(file);
+                kv_list_destroy(tokenList);
                 errno = ENOBUFS;
                 return NULL;
             }

@@ -102,3 +102,14 @@ kv_list_ptr kv_parser(kv_list_ptr tokenList)
 
     return pairList;
 }
+
+char *kv_pair_key(kv_pair_ptr pair){
+    if(pair) return pair->key;
+    errno = EINVAL;
+    return NULL;
+}
+char *kv_pair_value(kv_pair_ptr pair){
+    if(pair) return pair->value;
+    errno = EINVAL;
+    return NULL;
+}
