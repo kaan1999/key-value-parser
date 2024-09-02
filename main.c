@@ -24,7 +24,11 @@ int main(int argc, char *const argv[])
     }
 
     FILE *outputFile = fopen(outputFileName, "w");
-
+    if(!outputFile){
+        perror("Error");
+        kv_list_destroy(pairList);
+        kv_list_destroy(tokenStream);
+    }
     char pairBuffer[1024] = {'\0'};
     kv_list_forEach(pairList, pairNode)
         kv_pair_ptr pair = kv_list_data(pairNode);
