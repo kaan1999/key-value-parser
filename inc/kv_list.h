@@ -2,6 +2,8 @@
 #define KV_LIST_H
 
 #include <errno.h>
+#include <kv_utils.h>
+#include <stddef.h>
 
 typedef errno_t (*kv_nodeDtor_fptr)(void*);
 

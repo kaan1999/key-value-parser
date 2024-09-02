@@ -2,6 +2,7 @@
     "files.associations": {
         "stddef.h": "c",
         "kv_parser.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "errno.h": "c"
     }
 }
