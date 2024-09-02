@@ -45,6 +45,46 @@ digit        = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
 * kv_pair_value: retrieves the value from a key-value pair.
 * kv_parser: parses a list of tokens into key-value pairs.
 
+## Tutorial
+```
+//first you need to add kv_parser and kv_tokenizer header files.
+#include <kv_tokenizer>
+#include <kv_parser>
+
+int main(void){
+    //declare two lists to hold tokens and pairs
+    kv_list_ptr tokenList = NULL, pairList = NULL;
+    //Let's parse the tokens from the file with the tokenizer_read function
+    tokenList = kv_tokenizer_read("example.txt");
+    //Let's do error handling here.
+    if(!tokenList){
+        perror("Error");
+        return 1;
+    }
+    //If there are no errors, let's send the tokens in tokenList to the parser.
+    pairList = kv_parser(tokenList);
+    //we don't need tokenList anymore
+    kv_list_destroy(tokenList);
+    //Let's check for errors again (if there is an error in the parser, the program will end without returning)
+    if(!pairList){
+        perror("Error");
+        return 1;
+    }
+    //If there are no errors, our pairs are now stored in pairList.
+    //use the kv_list_forEach macro to access each pair
+    //The forEach macro takes two parameters, first is a list to iterate and second the node returned from that list.
+    kv_list_forEach(pairList, pairNode)
+        //Here we access the pair by giving the pairNode to the kv_list_data function
+        kv_pair_ptr pair = kv_list_data(pairNode);
+        //You can use kv_pair_key and kv_pair_value to access key and value in pair
+        char *key = kv_pair_key(pair);
+        char *value = kv_pair_value(pair);
+    kv_end //each forEach must end with kv_end
+    //destroy after you are done with pairList
+    kv_list_destroy(pairList);
+}
+```
+
 # Usage
 The program gets an input file name and an output file name. The parse data is written to the output file.
 
